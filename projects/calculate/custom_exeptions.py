@@ -1,0 +1,6 @@
+class UnknownOperation(Exception):
+    ...
+
+
+class InputNonDigit(Exception):
+    ...
