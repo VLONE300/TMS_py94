@@ -15,18 +15,17 @@ class Transport(Moving):
 
 
 class Car(Transport):
-    def __init__(self, not_started):
-        self.started = not_started
-
+    def __init__(self, status='not_started'):
+        self.status = status
 
     def launch(self):
-        self.started = 'starteed'
+        self.status = 'started'
         return 'launch'
 
     def move(self):
-        return 'rides'
-
-
+        if self.status == 'started':
+            return 'rides'
+        return "car not started"
 
 
 class Duck(Animal):
@@ -51,4 +50,4 @@ car = Car()
 
 print(duck.move(), duck.voice())
 print(tiger.move(), tiger.voice())
-print(car.move(), car.launch(), )
+print(car.move(), car.launch(), car.status)
