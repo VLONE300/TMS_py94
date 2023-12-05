@@ -24,7 +24,7 @@ class MyHashMap:
                 return -1
 
     def remove(self, key):
-        for i in range(len(self.map)):
+        for i in range(len(self.map)):  
             if self.map[i][0] == key:
                 self.map.pop(i)
 
