@@ -15,8 +15,8 @@ class Transport(Moving):
 
 
 class Car(Transport):
-    def __init__(self, status='not_started'):
-        self.status = status
+    def __init__(self):
+        self.status = 'not_started'
 
     def launch(self):
         self.status = 'started'
