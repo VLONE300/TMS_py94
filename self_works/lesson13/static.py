@@ -1,4 +1,3 @@
-import json
 from self_works.lesson13.custom_exceptions import ConnectionRefused
 
 
