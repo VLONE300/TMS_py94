@@ -1,23 +1,21 @@
-CREATE TABLE authors (
+CREATE TABLE author (
     author_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL
+    email VARCHAR(255) NOT NULL
 );
 
--- #Создаем таблицу для статей
-CREATE TABLE articles (
+CREATE TABLE article (
     article_id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    topic VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    author_id INT REFERENCES authors(author_id)
+    topic VARCHAR(100),
+    content TEXT,
+    author_id INTEGER REFERENCES author(author_id)
 );
 
--- #Создаем таблицу для комментариев
-CREATE TABLE comments (
+CREATE TABLE comment (
     comment_id SERIAL PRIMARY KEY,
     nickname VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    rating INT CHECK (rating >= 1 AND rating <= 5),
-    article_id INT REFERENCES articles(article_id)
+    content TEXT,
+    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
+    article_id INTEGER REFERENCES article(article_id)
 );
