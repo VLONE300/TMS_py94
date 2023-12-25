@@ -1,18 +1,20 @@
-create table travel_user
-(
-    id         serial PRIMARY KEY,
-    foreign_id int,
-    name       varchar(100),
-    email      varchar(100),
-    age        int
+CREATE TABLE travel_user (
+    id SERIAL PRIMARY KEY,
+    foreign_id INTEGER,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    age INTEGER
 );
-create table travel_country
-(
-    id         serial PRIMARY KEY,
-    foreign_id int,
-    name       varchar(100)
+
+CREATE TABLE travel_country (
+    id SERIAL PRIMARY KEY,
+    foreign_id INTEGER,
+    name VARCHAR(100) UNIQUE
 );
-create table UserCountry(
-    user_id serial REFERENCES travel_country(id),
-    country_id serial REFERENCES travel_user(id)
+
+CREATE TABLE UserCountry (
+    id serial PRIMARY KEY,
+    user_id int REFERENCES travel_user(id),
+    country_id int REFERENCES travel_country(id),
+    UNIQUE (user_id, country_id)
 );
