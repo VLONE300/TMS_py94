@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, request
 import sqlalchemy as db
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
 
@@ -14,6 +13,7 @@ session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=en
 Base = declarative_base()
 Base.query = session.query_property()
 
+# models need to be imported after the Flask application is created
 from models import *
 
 Base.metadata.create_all(bind=engine)
