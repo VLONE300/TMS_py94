@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block new_user %}
+{% block tables %}
 <table>
     <tr>
         <th>Name</th>
@@ -20,15 +20,47 @@
 <br>
 <br>
 
-<form action="/sync" method="POST">
+<form id="syncForm" action="" method="POST">
     <input type="submit" value="Sync">
 </form>
-
-<form action="/upload" method="POST">
+<form id="uploadForm" action="" method="POST">
     <input type="submit" value="Upload">
 </form>
-<form action="/delete" method="POST">
-    <input type="submit" value="Delete all">
+<form id="deleteForm" action="" method="POST">
+    <input type="submit" value="Drop all">
 </form>
+
+<!--Загуглил это для того чтоб при нажатии кнопки, страница обновлялась на месте-->
+<script>
+    document.getElementById('syncForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        sendFormRequest('sync');
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        sendFormRequest('upload');
+    });
+
+    document.getElementById('deleteForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        sendFormRequest('delete');
+    });
+
+    function sendFormRequest(endpoint) {
+        var formData = new FormData(document.getElementById(endpoint + 'Form'));
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', endpoint, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Reload the current page after the request is complete
+                location.reload();
+            }
+        };
+
+        xhr.send(formData);
+    }
+</script>
 
 {% endblock %}

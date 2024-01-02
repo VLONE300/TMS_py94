@@ -1,29 +1,53 @@
-import requests
-from self_works.lesson21.user import User
+from flask import Flask, request, render_template
+
+from sqlalchemy.orm import Session
+
+from self_works.lesson21.data_loader import get_users_id, get_user_data, get_email_from_db
+from self_works.lesson21.db import NewUser, engine
+
+app = Flask(__name__)
 
 
-class DataLoader:
+@app.route('/sync', methods=['POST'])
+def sync():
+    with Session(autoflush=False, bind=engine) as db:
+        for user_id in get_users_id():
+            user = get_user_data(user_id)
+            new_user = NewUser(name=f"{user['name']}", email=f"{user['email']}", age=f"{user['age']}")
+            db.add(new_user)
+            db.commit()
+            print(new_user.id)
+    return 'Sync done'
 
-    def __init__(self, url):
-        self.url = url
 
-    def get_users_id(self):
-        users = requests.get(f'{self.url}/user/').json()
-        user_ids = [user['id'] for user in users]
-        return user_ids
+@app.route('/upload', methods=['POST'])
+def upload():
+    with Session(autoflush=False, bind=engine) as db:
+        for user_id in get_users_id():
+            user = get_user_data(user_id)
+            if user['email'] not in get_email_from_db():
+                new_user = NewUser(name=f"{user['name']}", email=f"{user['email']}", age=f"{user['age']}")
+                db.add(new_user)
+                db.commit()
+                print(new_user.id)
+    return 'Upload done'
 
-    def get_user_data(self, user_id):
-        user_data = requests.get(f'{self.url}/user/{user_id}/').json()
-        return User(**user_data)
 
-    def load_data_to_db(self, connection):
-        cursor = connection.cursor()
+@app.route('/delete', methods=['POST'])
+def drop_all():
+    with Session(autoflush=False, bind=engine) as db:
+        db.query(NewUser).delete()
+        db.commit()
+    return 'All data dropped'
 
-        for user_id in self.get_users_id():
-            user = self.get_user_data(user_id)
 
-            cursor.execute(
-                "INSERT INTO new_user (name, email, age) VALUES (%s, %s, %s);",
-                (user.name, user.email, user.age))
+@app.route('/users', methods=['GET'])
+def get_products():
+    if request.method == 'GET':
+        with Session(engine) as sss:
+            users = sss.query(NewUser).all()
+        return render_template('index.html', users=users)
 
-        connection.commit()
+
+if __name__ == '__main__':
+    app.run(debug=True)
