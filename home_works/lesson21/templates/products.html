@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block products %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Fats</th>
+        <th>Carbs</th>
+        <th>Proteins</th>
+        <th>Grams</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td>{{product.name}}</td>
+        <td>{{product.fats}}</td>
+        <td>{{product.carbs}}</td>
+        <td>{{product.protein}}</td>
+        <td>{{product.gramms}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<br>
+<br>
+{% for msg in get_flashed_messages() %}
+<div class="flash">{{msg}}</div>
+{% endfor %}
+<form action="" method="POST">
+    <label>
+        <input type="text" name="name" placeholder="Name">
+    </label>
+    <label>
+        <input type="text" name="proteins" placeholder="Proteins">
+    </label>
+    <label>
+        <input type="text" name="fats" placeholder="Fats">
+    </label>
+    <label>
+        <input type="text" name="carbs" placeholder="Carbs">
+    </label>
+    <label>
+        <input type="text" name="grs" placeholder="Grams">
+    </label>
+    <input type="submit" value="Add">
+</form>
+{% endblock %}
