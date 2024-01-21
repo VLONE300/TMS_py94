@@ -6,8 +6,19 @@
 </head>
 <body>
 <h1>sign in</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <table>
-    {{ forms }}
-</table>
+    <form method="POST">
+        {% csrf_token %}
+        <table class="form-control">
+            {{ forms }}
+        </table>
+        <input type="submit" class="btn" value="Sign in">
 </body>
 </html>

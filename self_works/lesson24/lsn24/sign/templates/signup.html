@@ -1,17 +1,27 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'sign/css/styles.css' %}">
     <meta charset="UTF-8">
     <title>sign up</title>
 </head>
 <body>
 <h1>sign up</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <form method="POST">
-        {% csrf_token %}
-    <table>
+    {% csrf_token %}
+    <table class="form-control">
         {{ forms }}
     </table>
-    <input type="submit" value="Send" >
+    <input type="submit" class="btn" value="Register">
 </form>
 </body>
 </html>
