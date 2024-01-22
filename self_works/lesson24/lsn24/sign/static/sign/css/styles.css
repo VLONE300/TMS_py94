@@ -1,18 +1,66 @@
-.form-group {
-    margin-bottom: 15px;
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 403px);
+    font-family: 'Lilita One', sans-serif;
 }
 
-.form-control {
+h1 {
+    letter-spacing: 3px;
+}
+p {
+    font-size: 25px;
+    line-height: 1.2;
+}
+
+input {
+    border: 0px;
+    border-bottom: 1px solid gray;
+    padding: 5px 0px 5px;
+    color: #00d1b2;
+    outline: 0px;
+    transition: border-bottom .4s ease;
+    font-size: 20px;
+}
+
+input:hover, button:hover {
+    border-bottom: 1px solid black;
+}
+
+input:focus {
+    border-bottom: 1px solid #00d1b2;
+}
+
+
+button:hover {
+    border: 1px solid #00d1b2;
+    background-color: #00d1b2;
+
+}
+
+
+.form {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    max-width: 400px;
     width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
 }
 
-.btn {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
+
+.image-wrapper {
+    transform: translateX(-24px);
+}
+
+button {
+    background: none;
+    outline: none;
+    border: 1px solid gray;
+    transition: background-color .4s ease, border .4s ease;
+    padding: 5px 0px 5px;
+    margin-top: 15px;
     cursor: pointer;
+    font-size: 20px;
 }
