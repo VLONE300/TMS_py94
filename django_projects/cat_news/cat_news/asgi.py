@@ -1,5 +1,5 @@
 """
-ASGI config for Cat_News project.
+ASGI config for cat_news project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Cat_News.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cat_news.settings')
 
 application = get_asgi_application()
