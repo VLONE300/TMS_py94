@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cat News</title>
+</head>
+<body>
+<ul>
+    {% for n in news %}
+        <h1>{{ n.title }}</h1>
+        {{ n.content|slice:'100' }}...
+        <hr>
+    {% endfor %}
+</ul>
+</body>
+</html>
