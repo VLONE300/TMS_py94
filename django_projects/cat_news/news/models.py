@@ -16,6 +16,10 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = 'News'
+        verbose_name_plural = "News"
+
 
 class Comment(models.Model):
     nick_name = models.CharField(max_length=255)
@@ -28,4 +32,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.nick_name} on {self.date}'
-
