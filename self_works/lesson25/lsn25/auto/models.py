@@ -6,7 +6,6 @@ class Auto(models.Model):
     vin_number = models.CharField(max_length=255)
     model = models.ForeignKey('ModelAuto', on_delete=models.CASCADE)
     status_rent = models.BooleanField(default=False)
-    user = models.ForeignKey('UserAuto', on_delete=models.CASCADE)
     brand = models.ForeignKey("BrandAuto", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -30,8 +29,11 @@ class BrandAuto(models.Model):
 
 
 class UserAuto(models.Model):
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
+    auto = models.ForeignKey('Auto', on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    models = models.ForeignKey('ModelAuto', on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.first_name}'
