@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from .forms import CommentCreateForm
@@ -22,8 +22,9 @@ class RoomView(View):
             comment = form.save(commit=False)
             comment.category = room
             comment.save()
-
-        return render(request, 'room.html', context={'form': form})
+            return redirect('rooms', room_slug=room.slug)
+        messages.error(request, 'Нельзя так писать')
+        return redirect('rooms', room_slug=room.slug)
 
     def get(self, request, room_slug):
         room = get_object_or_404(Room, slug=room_slug)

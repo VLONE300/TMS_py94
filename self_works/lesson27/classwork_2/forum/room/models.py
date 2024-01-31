@@ -19,3 +19,4 @@ class Comment(models.Model):
     nickname = models.CharField(max_length=255)
     content = models.TextField()
     category = models.ForeignKey('Room', on_delete=models.CASCADE)
+
