@@ -75,8 +75,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'cat_news',
-        'USER': 'vlone',
-        'PASSWORD': 'qwerty1234',
+        'USER': 'tms',
+        'PASSWORD': 'pass',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

@@ -5,11 +5,21 @@
     <title>Cat News</title>
 </head>
 <body>
+<form action="">
+    <select name='name_sorting' id="">
+        <option value="rating">Rating</option>
+    </select>
+    <select name='priority_sorting' id="">
+        <option value="">От низкого к высокому</option>
+        <option value="-">От высокого к низскому</option>
+    </select>
+    <button>Send</button>
+</form>
 <ul>
     {% for n in news %}
-        <h1>{{ n.title }}</h1>
-        {{ n.content|slice:'100' }}...
-        <hr>
+    <h1>{{ n.title }}</h1>
+    {{ n.content|slice:'100' }}...
+    <hr>
     {% endfor %}
 </ul>
 </body>

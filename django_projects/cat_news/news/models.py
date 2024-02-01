@@ -8,7 +8,7 @@ class News(models.Model):
     content = models.TextField(null=False, blank=False)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
-    rating = models.FloatField(default=0)
+    rating = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True)
     views = models.IntegerField(default=0)
     comments = models.TextField()
