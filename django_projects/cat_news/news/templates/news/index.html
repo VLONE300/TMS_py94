@@ -13,13 +13,15 @@
         <option value="">От низкого к высокому</option>
         <option value="-">От высокого к низскому</option>
     </select>
-    <button>Send</button>
+    <button >Send</button>
+    <button><a href="{% url 'news:new_article' %}">Article creation</a></button>
+    <button><a href="{% url 'news:profile' %}">Profile</a></button>
 </form>
 <ul>
     {% for n in news %}
-    <h1>{{ n.title }}</h1>
-    {{ n.content|slice:'100' }}...
-    <hr>
+        <h1>{{ n.title }}</h1>
+        {{ n.content|slice:'100' }}...
+        <hr>
     {% endfor %}
 </ul>
 </body>

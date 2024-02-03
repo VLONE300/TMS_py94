@@ -18,6 +18,7 @@ class News(models.Model):
     date = models.DateField(auto_now_add=True)
     views = models.IntegerField(default=0)
     comments = models.TextField()
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title
