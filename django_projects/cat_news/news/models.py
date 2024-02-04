@@ -12,12 +12,11 @@ class News(models.Model):
     image = models.ImageField(upload_to='', blank=True)
     title = models.CharField(max_length=128, null=False, blank=False)
     content = models.TextField(null=False, blank=False)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
-    rating = models.IntegerField(default=0)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
+    rating = models.PositiveIntegerField(default=0)
     date = models.DateField(auto_now_add=True)
-    views = models.IntegerField(default=0)
-    comments = models.TextField()
+    views = models.PositiveIntegerField(default=0)
     author = models.ForeignKey('Author', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -34,7 +33,7 @@ class Comment(models.Model):
     date = models.DateField(auto_now_add=True)
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
-    news = models.ForeignKey('News', on_delete=models.CASCADE, related_name='comments_for_news')
+    news = models.ForeignKey('News', on_delete=models.CASCADE, related_name='news')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
 
     def __str__(self):
