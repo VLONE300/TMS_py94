@@ -1,0 +1,22 @@
+{% extends 'sign/base.html' %}
+
+{% block content %}
+    {% load static %}
+    <div class="image-wrapper">
+        <img src="{% static 'sign/images/dancing-brawl-stars.gif' %}">
+    </div>
+    <h1>Sign In</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="POST" class="form">
+        {% csrf_token %}
+        {{ forms.email }}
+        {{ forms.password }}
+        <button type="submit">Sign in</button>
+    </form>
+{% endblock %}
