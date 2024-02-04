@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ comment.category }}</title>
+</head>
+<body>
+{% for comment in comments %}
+    {% if room == comment.category %}
+        <div><h3>{{ comment.nickname }}</h3></div>
+        <div><h4>{{ comment.content }}</h4></div>
+        <hr>
+    {% endif %}
+{% endfor %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.nickname }}
+    {{ form.content }}
+    <button>Send</button>
+
+{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</form>
+</body>
+</html>
