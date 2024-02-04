@@ -33,7 +33,7 @@ class UserAuto(models.Model):
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
     auto = models.ForeignKey('Auto', on_delete=models.SET_NULL, null=True, blank=True, default=None)
-    models = models.ForeignKey('ModelAuto', on_delete=models.SET_NULL)
+    models = models.ForeignKey('ModelAuto', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.first_name}'
