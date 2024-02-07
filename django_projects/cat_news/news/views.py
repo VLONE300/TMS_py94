@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
-from .models import News
+from .models import News, Author
 from .forms import RegisterForm, NewArticleForm
 
 
@@ -21,13 +21,15 @@ class NewsIndexView(View):
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'news/profile.html')
+        author = Author.objects.get(username=request.user)
+        news = News.objects.filter(author=author)
+        return render(request, 'news/profile.html', context={"author": author, 'news':news})
 
 
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('news.profile')
+    success_url = reverse_lazy('news:profile')
 
     def form_valid(self, form):
         form.save()
@@ -36,11 +38,14 @@ class RegisterView(CreateView):
 
 class NewArticleView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'news/new_article.html')
+        form = NewArticleForm()
+        return render(request, 'news/new_article.html', context={"form": form})
 
     def post(self, request):
         form = NewArticleForm(request.POST)
         if form.is_valid():
-            form.save()
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
             return redirect('/')
         return render(request, 'news/new_article.html', {'form': form})

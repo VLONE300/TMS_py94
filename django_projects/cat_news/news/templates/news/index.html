@@ -5,6 +5,8 @@
     <title>Cat News</title>
 </head>
 <body>
+  <h2><a href="{% url 'login' %}">Sign in</a></h2>
+    <h2><a href="{% url 'news:register' %}">Sign up</a></h2>
 <form action="">
     <select name='name_sorting' id="">
         <option value="rating">Rating</option>
@@ -14,14 +16,17 @@
         <option value="-">От высокого к низскому</option>
     </select>
     <button >Send</button>
-    <button><a href="{% url 'news:new_article' %}">Article creation</a></button>
-    <button><a href="{% url 'news:profile' %}">Profile</a></button>
+    <h3><a href="{% url 'news:new_article' %}">Article creation</a></h3>
+    <h3><a href="{% url 'news:profile' %}">Profile</a></h3>
 </form>
 <ul>
     {% for n in news %}
+        {% if n.is_published %}
         <h1>{{ n.title }}</h1>
+        <h3>Author - {{ n.author }}</h3>
         {{ n.content|slice:'100' }}...
         <hr>
+        {% endif %}
     {% endfor %}
 </ul>
 </body>
