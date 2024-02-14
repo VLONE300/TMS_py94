@@ -1,15 +1,16 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 
-# Register your models here.
-from django.contrib import admin
-from .models import News, Author
+from .models import News, Comment
 
 
 @admin.register(News)
-class AutoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'is_published')
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'is_published')
     list_filter = ('is_published',)
     search_fields = ('title',)
 
 
-admin.site.register(Author)
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    ...

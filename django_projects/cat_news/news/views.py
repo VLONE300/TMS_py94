@@ -1,51 +1,96 @@
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.views import View
-from django.views.generic import CreateView
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from django.views.generic import DetailView
 
-from .models import News, Author
-from .forms import RegisterForm, NewArticleForm
+from news.models import News
+from news.constants import NewsStatus
+
+from .forms import NewsForm, CommentForm
 
 
-# Create your views here.
-class NewsIndexView(View):
-
+class MainView(View):
     def get(self, request):
-        sorting_param = request.GET.get('name_sorting', '')
-        priority_sorting = request.GET.get('priority_sorting', '')
-        news = News.objects.order_by(f'{priority_sorting}{sorting_param}' or 'pk')
-        return render(request, 'news/index.html', context={"news": news})
+        all_news = News.objects.filter(is_published=True)
+        return render(request, 'index.html', {'all_news': all_news})
 
 
-class ProfileView(LoginRequiredMixin, View):
+class AddNewsView(View):
     def get(self, request):
-        author = Author.objects.get(username=request.user)
-        news = News.objects.filter(author=author)
-        return render(request, 'news/profile.html', context={"author": author, 'news':news})
-
-
-class RegisterView(CreateView):
-    form_class = RegisterForm
-    template_name = 'registration/register.html'
-    success_url = reverse_lazy('news:profile')
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
-
-class NewArticleView(LoginRequiredMixin, View):
-    def get(self, request):
-        form = NewArticleForm()
-        return render(request, 'news/new_article.html', context={"form": form})
+        form = NewsForm()
+        return render(request, 'news/add_news.html', context={"form": form})
 
     def post(self, request):
-        form = NewArticleForm(request.POST)
+        form = NewsForm(request.POST, request.FILES)
         if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user
-            article.save()
+            news = form.save(commit=False)
+            news.user = request.user
+            news.save()
             return redirect('/')
-        return render(request, 'news/new_article.html', {'form': form})
+        return render(request, 'news/add_news.html', {'form': form})
+
+
+class EditNewsView(View):
+    def get(self, request, pk):
+        news = News.objects.get(pk=pk)
+        return render(request, 'news/edit_news.html', {'news': news})
+
+    def post(self, request, pk):
+        news = News.objects.get(pk=pk, user=request.user)
+
+        news.title = request.POST["title"]
+        news.content = request.POST["content"]
+
+        image_news = request.FILES.get('image')
+        if image_news:
+            fs = FileSystemStorage()
+            url = fs.save(image_news.name, image_news)
+            news.image = url
+        news.save()
+        return redirect('profile')
+
+
+class RemoveNewsView(View):
+    def get(self, request, pk):
+        News.objects.filter(pk=pk, user=request.user).delete()
+        return redirect('profile')
+
+
+class SendCheckNewsView(View):
+    def get(self, request, pk):
+        news = News.objects.get(pk=pk, user=request.user, status=NewsStatus.DRAFT)
+        news.status = NewsStatus.VERIFICATION_SENT
+        news.save()
+        return redirect('profile')
+
+
+class PublishNewsView(View):
+    def get(self, request, pk):
+        news = News.objects.get(pk=pk, user=request.user, status=NewsStatus.VERIFICATION_SUCCESS)
+        news.is_published = True
+        news.save()
+        return redirect('profile')
+
+
+class ReadNewsView(DetailView):
+    def get(self, request, pk):
+        news = News.objects.get(pk=pk, is_published=True)
+        return render(request, 'news/read_news.html', {'news': news})
+
+
+class AddCommentView(View):
+    def post(self, request, pk):
+        form = CommentForm(request.POST)
+        news = News.objects.get(pk=pk)
+        if form.is_valid():
+            form = form.save(commit=False)
+            if request.POST.get('parent',None):
+                form.parent_id = int(request.POST.get('parent'))
+            form.name_id = request.user.id
+            form.news = news
+            form.save()
+        return redirect(news.get_absolute_url())

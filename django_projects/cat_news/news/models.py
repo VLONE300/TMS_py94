@@ -1,44 +1,42 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib import auth
 from django.db import models
+
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+from .constants import NewsStatus
 
 
 # Create your models here.
-
-class Author(AbstractUser):
-    ...
-
-    def __str__(self):
-        return f'{self.username}'
-
-
 class News(models.Model):
-    image = models.ImageField(upload_to='', blank=True)
-    title = models.CharField(max_length=128, null=False, blank=False)
-    content = models.TextField(null=False, blank=False)
-    likes = models.PositiveIntegerField(default=0)
-    dislikes = models.PositiveIntegerField(default=0)
-    rating = models.PositiveIntegerField(default=0)
-    date = models.DateField(auto_now_add=True)
-    views = models.PositiveIntegerField(default=0)
-    author = models.ForeignKey('Author', on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image = models.ImageField(upload_to='images', null=True, blank=True, default='')
+
+    status = models.IntegerField(choices=NewsStatus.choices, default=NewsStatus.DRAFT)
     is_published = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.title
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
+    def get_absolute_url(self):
+        return reverse("read-news", kwargs={"pk": self.pk})
+
+    def get_comment(self):
+        return self.comment_set.filter(parent__isnull=True)
     class Meta:
         verbose_name = 'News'
-        verbose_name_plural = "News"
+        verbose_name_plural = 'News'
 
 
 class Comment(models.Model):
-    nick_name = models.CharField(max_length=255)
-    content = models.TextField(max_length=255)
-    date = models.DateField(auto_now_add=True)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
-    news = models.ForeignKey('News', on_delete=models.CASCADE, related_name='news')
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    name = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    text = models.TextField('Comment', max_length=5000)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Parent')
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Comment by {self.nick_name} on {self.date}'
+        return f'{self.name} - {self.news.title}'
+
+    class Meta:
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
