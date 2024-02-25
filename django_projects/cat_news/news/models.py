@@ -7,15 +7,26 @@ from django.urls import reverse
 from .constants import NewsStatus
 
 
-# Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField('Description')
+    url = models.SlugField(max_length=160, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+        verbose_name = 'Category'
+
+
 class News(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='images', null=True, blank=True, default='')
-
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
     status = models.IntegerField(choices=NewsStatus.choices, default=NewsStatus.DRAFT)
     is_published = models.BooleanField(default=False)
-
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def get_absolute_url(self):
@@ -23,6 +34,7 @@ class News(models.Model):
 
     def get_comment(self):
         return self.comment_set.filter(parent__isnull=True)
+
     class Meta:
         verbose_name = 'News'
         verbose_name_plural = 'News'
