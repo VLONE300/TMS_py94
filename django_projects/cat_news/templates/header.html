@@ -1,0 +1,27 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'news/сss/styles.css' %}">
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" href="/">Main</a>
+    </li>
+    {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'sign-in' %}">Sign-in</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'sign-up' %}">Sign-up</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'create-news' %}">Add News</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+    {% endif %}
+
+    
+</ul>

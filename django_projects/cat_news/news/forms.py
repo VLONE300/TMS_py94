@@ -25,6 +25,7 @@ class NewsForm(forms.ModelForm):
             'image': forms.FileInput()
         }
 
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
