@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block edit_news %}
+    <form action="{% url 'edit-news' news.url %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+            <img src="{{ news.image.url }}" alt="">
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Title</label>
+            <input type="text" name="title"
+                   class="form-control" id="exampleFormControlInput1"
+                   placeholder="Title" value="{{ news.title }}">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="13">
+                {{ news.content }}
+            </textarea>
+        </div>
+            <input type="file" name="image" value="{{ news.image.url }}"><br>
+        <button class="btn btn-primary">Save</button>
+    </form>
+{% endblock %}
