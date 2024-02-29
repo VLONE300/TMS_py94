@@ -30,6 +30,9 @@ class News(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     url = models.SlugField(max_length=160, unique=True)
 
+    def __str__(self):
+        return self.title
+
     def save(self, *args, **kwargs):
         if not self.url:
             self.url = slugify(self.title)

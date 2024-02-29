@@ -10,10 +10,10 @@
             <div class="card-body">
                 <h5 class="card-title">{{ news.title }}</h5>
                 <p class="card-text">{{ news.content | truncatewords:10 |safe}}</p>
-                <a href="{{ news.get_absolute_url }}" class="btn btn-primary">Edit</a>
-                <a href="{{ news.get_absolute_url }}" class="btn btn-danger">Remove</a>
+                <a href="{% url 'edit-news' news.url %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'remove-news' news.url %}" class="btn btn-danger">Remove</a>
                 {% if news.status == 0 %}
-                    <a href="{% url 'send-check-news' news.id %}" class="btn btn-primary">Send check</a>
+                    <a href="{% url 'send-check-news' news.url %}" class="btn btn-primary">Send check</a>
                 {% elif news.status == 1 %}
                     <button class="btn btn-primary" disabled>Checking..</button>
                 {% elif news.status == 2 and not news.is_published %}

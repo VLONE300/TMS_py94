@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block news_list %}
+    <div class="card-wrapper">
+        {% for news in news_list %}
+            <div class="card">
+                <div class="img-wrapper">
+                    <img class="card-img-top" src="{{ news.image.url }}" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h5>{{ news.title }}</h5>
+                    <div class="card-text">{{ news.content | slice:100 |safe }}...</div>
+                    <a href="{{ news.get_absolute_url }}" class="btn btn-primary">Read more..</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
